@@ -13,7 +13,7 @@
 @stop
 
 
-@section('page-header')
+{{-- @section('page-header')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
@@ -29,6 +29,8 @@
     <!-- breadcrumb -->
 @endsection
 
+سيطوشستيشس
+ --}}
 @section('content')
     @if (session()->has('delete'))
         <script>
