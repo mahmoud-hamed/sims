@@ -463,4 +463,13 @@ return [
     'notification' => 'Notification',
     'notifications' => 'Notifications',
     'noti' => 'Notification has been sent successfully',
+
+    'sims' => 'Sim Cards',
+    'month' => 'Month',
+    '3months' => '3 Months',
+    '6months' => '6 Months',
+    'year' => 'Year',
+    'serial' => 'Serial Number',
+    'add-sim' => 'Add Sim'
+
 ];

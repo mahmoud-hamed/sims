@@ -18,6 +18,7 @@ use App\Http\Controllers\InvoiceReportController;
 use App\Http\Controllers\Admin\ComplainController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\NotiController;
+use App\Http\Controllers\Admin\SimController;
 use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\CustomersReportController;
 use App\Http\Controllers\Admin\TransactionController;
@@ -79,8 +80,8 @@ Route::middleware('auth')->group(function () {
             'markAsRead'
         )->name('notifications.markAsRead');
     });
-    
- 
+
+
     Route::controller(BannerController::class)->group(function () {
         Route::get('banners', 'index')->name('banners');
         Route::get('banner/create', 'create')->name('banner.create');
@@ -88,7 +89,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('banner/delete/{id}', 'destroy')->name('banner.delete');
     });
 
-   
+    Route::controller(SimController::class)->group(function () {
+        Route::get('sims', 'index')->name('sims');
+        Route::get('sim/create', 'create')->name('sim.create');
+        Route::post('sim/store', 'store')->name('sim.store');
+        Route::get('sim/edit/{id}', 'edit')->name('sim.edit');
+        Route::post('sim/update/{id}', 'update')->name('sim.update');
+        Route::delete('sim/delete/{id}', 'destroy')->name('sim.destroy');
+    });
 
     Route::prefix('users')->group(function () {
         Route::controller(ClientController::class)->group(function () {
@@ -99,8 +107,6 @@ Route::middleware('auth')->group(function () {
             Route::post('user/update/{id}', 'update')->name('user.update');
             Route::delete('user/delete/{id}', 'destroy')->name('user.destroy');
         });
-
-    
     });
 
     Route::controller(ContactController::class)->group(function () {
@@ -126,8 +132,6 @@ Route::middleware('auth')->group(function () {
         'profile.edit'
     );
     Route::post('/{page}/update/{id}', [AdminController::class, 'update']);
-
-
-   
 });
+
 require __DIR__ . '/auth.php';
