@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api\user;
 
+use Throwable;
+use Carbon\Carbon;
+use App\Models\Sim;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\MySim;
 use App\Models\Order;
 use App\helpers\helper;
 use App\Models\Product;
@@ -13,10 +17,13 @@ use App\Models\OrderItem;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Events\UserRegistration;
+use Illuminate\Support\Facades\DB;
 use App\Notifications\NewOrderNoti;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\mysimResource;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class OrderController extends Controller
 {
@@ -25,75 +32,91 @@ class OrderController extends Controller
         $this->helper = new helper();
     }
 
-    public function placeOrder(Request $request)
+  
+
+    public function checkout(Request $request)
     {
-        $validate = $request->validate([
-            'payment_method' => 'required',
-            'address_id' => 'required:exists,addresses',
-            'total_del_price' => 'required',
-            'description' => 'required',
-            'service_id' => 'required|exists:services,id',
-        ]);
-        $address = auth()->user()->addresses()->where('user_id', auth()->user()->id)->first();
-        $service = Service::findorFail($validate['service_id']);
-        $order = new Order();
-        $order->payment_method = $validate['payment_method'];
-        $order->description = $validate['description'];
-        $order->total_del_price = $validate['total_del_price'];
-        $order->address_id = $address->id;
-        $order->service_id = $service->id;
-        $order->client_id = auth()->user()->id;
-        $order->ref_number = uniqid();
+        try {
+            $validator = validator()->make($request->all(), [
+                'name' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+            ]);
+    
+            if ($validator->fails()) {
+                return $this->helper->ResponseJson(0, $validator->errors()->first(), $validator->errors());
+            }
+    
+            DB::beginTransaction(); // Start the database transaction
+    
+            $order = Order::create([
+                'name' => $request->name,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'client_id' => auth()->user()->id,
+            ]);
+    
+    
+            $cart = Cart::where('client_id', auth()->user()->id)->get();
+    
+            if ($cart->isNotEmpty()) {
+                $collectCartPrice = [];
+    
+                foreach ($cart as $item) {
 
-        $order->save();
+                    OrderItem::create([
+                        'sim_id' => $item->sim_id,
+                        'qty' => $item->qty,
+                        'price' => $item->price,
+                        'total_price' => $item->total_price,
+                        'order_id' => $order->id,
+                    ]);
+                    
+                    MySim::create([
+                        'sim_id' => $item->sim_id,
+                        'client_id' => auth()->user()->id,
+                        'date'=> $item->start_date,
+                        'end_date'=> $item->end_date,
+                    ]);
+    
+                    $sim = Sim::where('id', $item->sim_id)->first();
+                    $price = Cart::where('id', $item->id)->first();
+                    $collectCartPrice[] = $item->total_price;
+                }
+    
+                $sub_total = array_sum($collectCartPrice);
+                $total = $sub_total + 50;
+    
+                $order->update([
+                    'sub_total' => round($sub_total),
+                    'shipping_price' => 50,
+                    'total_price' => round($total),
+                ]);
+    
+                $cartItems = Cart::where('client_id', auth()->user()->id)->get();
+                Cart::destroy($cartItems);
+    
+                DB::commit(); // Commit the transaction since all operations were successful
+    
+                return $this->helper->ResponseJson(1, __('apis.success'), $order);
+            } else {
+                DB::rollBack(); // Roll back the transaction since the cart is empty
+    
+                return $this->helper->ResponseJson(1, __('apis.cart_is_empty'), []);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack(); // Roll back the transaction if an exception occurs
+    
+            return $this->helper->ResponseJson(0, $e->getMessage());
+        }
 
-        event(new newOrder());
-
-        $users = User::where('id', 1)->first();
-        $user_create = Auth::user()->number;
-        Notification::send($users, new NewOrderNoti($order->id, $user_create));
-
-        return $this->helper->ResponseJson(1, __('apis.success'), $order);
     }
 
-    // public function checkout(Request $request)
-    // {
-    //     $validate = $request->validate([
-    //         'payment_method' => 'required',
-    //         'address_id' => 'required:exists,addresses'
-    //     ]);
-    //     $order = new Order();
-    //     $order->payment_method = $validate['payment_method'];
-    //     $order->client_id = auth()->user()->id;
-    //     $order->save();
-    //     $cart = Cart::where('client_id', 1)->get();
-    //     if ($cart != '[]') {
+    public function mySims(Request $request)
+    {
+        $sims = MySim::where('client_id', auth()->user()->id)->get();
 
-    //         foreach ($cart as $item) {
-    //             OrderItem::create([
-    //                 'product_id' => $item->product_id,
-    //                 'total_price' => $item->del_price,
-    //                 'order_id' => $order->id,
+        return $this->helper->ResponseJson(1, __('apis.success'), mysimResource::collection($sims));
 
-    //             ]);
-    //             $product = Product::where('id', $item->product_id)->first();
-    //             $price = Cart::where('id', $item->id)->first();
-    //             $collectCartPrice[] = $item->del_price;
-    //         }
-    //         $total_cost = array_sum($collectCartPrice);
-
-
-    //         $order->update([
-    //             'total_del_price' => $total_cost,
-    //             'address_id' => $request->address_id,
-    //             'ref_number' => Str::random(10)
-    //         ]);
-    //         $cartItems = Cart::where('client_id', auth()->user()->id)->get();
-
-    //         Cart::destroy($cartItems);
-    //         return $this->helper->ResponseJson(1, __('apis.success'), $order);
-    //     } else {
-    //         return $this->helper->ResponseJson(1, __('apis.cart_is_empty'), []);
-    //     }
-    // }
+    }
 }

@@ -48,7 +48,6 @@ class AddressController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'number' => 'required|numeric',
-            'description' => 'required',
             'lat' => 'required|numeric',
             'long' => 'required|numeric',
         ]);
@@ -72,7 +71,6 @@ class AddressController extends Controller
                 $request->validate([
                     'title' => 'required|string|max:255',
                     'number' => 'required|numeric',
-                    'description' => 'required',
                     'lat' => 'required|numeric',
                     'long' => 'required|numeric',
                 ]);

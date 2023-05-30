@@ -27,11 +27,11 @@ use App\Http\Controllers\Api\user\NotiController;
 Route::group(['middleware' => 'api-lang'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
 
-        Route::group(['middleware'=> 'check-user'] ,function () {
+
             Route::post('/add-cart', [CartController::class, 'createCart']);
             Route::post('/cart-details', [CartController::class, 'cartDetails']);
             Route::post('delete-item-cart', [CartController::class, 'removeFromCart']);
-            Route::post('place-order', [OrderController::class, 'placeOrder']);
+            Route::post('checkout', [OrderController::class, 'checkout']);
             Route::post('category', [UserController::class, 'category']);
     
             Route::get('/user_addresses', [AddressController::class, 'index']);
@@ -40,27 +40,27 @@ Route::group(['middleware' => 'api-lang'], function () {
             Route::post('/del_address/{id}', [AddressController::class, 'destroy']);
     
             Route::get('my-orders', [UserController::class, 'myOrders']);
+            Route::get('my-sims', [OrderController::class, 'mySims']);
+
             Route::post('deposit', [WalletController::class, 'deposit']);
             Route::post('withdraw', [WalletController::class, 'withdraw']);
             Route::post('sendBalance', [WalletController::class, 'sendBalance']);
             Route::get('my-trans', [UserController::class, 'myTrans']);
             Route::post('search', [UserController::class, 'search']);
             Route::post('cancel-order', [UserController::class, 'cancelOrder']);
-    
+            Route::get('recently-added', [UserController::class, 'recently']);
             Route::post('/insertData', [AuthController::class, 'insertData']);
             Route::get('/profile', [AuthController::class, 'profile']);
             Route::post('/editProfile', [AuthController::class, 'editProfile']);
             Route::post('/delUser', [AuthController::class, 'delUser']);
             Route::get('home', [UserController::class, 'home']);
-
+            Route::get('get-sim',[UserController::class, 'getSim']);
             Route::get('/settings', [SettingController::class, 'index']);
             Route::post('/send_complain', [ComplainsController::class, 'send_complain']);
             Route::post('/contact_us', [ComplainsController::class, 'contact_us']);
         
         
     
-        });
-        Route::group(['middleware'=> 'check-del'] ,function () {
 
         Route::prefix('delivery')->group(function () {
             Route::get('list-orders', [DeliveryController::class, 'listOrders']);
@@ -68,7 +68,6 @@ Route::group(['middleware' => 'api-lang'], function () {
             Route::post('finish-order', [DeliveryController::class, 'finishOrder']);
             Route::post('my-orders', [DeliveryController::class, 'myOrders']);
         });
-    });
 
       
 

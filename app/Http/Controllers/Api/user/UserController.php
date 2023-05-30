@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers\Api\user;
 
+use App\Models\Sim;
 use App\Models\Order;
+use App\Models\Banner;
 use App\Models\Wallet;
 use App\helpers\helper;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Category;
+use App\Models\OrderItem;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\SimResource;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BannerResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\PlaceResource;
 use App\Http\Resources\TransResource;
+use App\Http\Resources\BannerResource;
 use App\Http\Resources\HomeCatResource;
 use App\Http\Resources\DelOrderResource;
 use App\Http\Resources\PlaceByCatResource;
 use App\Http\Resources\TrackOrderResource;
-use App\Models\Banner;
 
 class UserController extends Controller
 {
@@ -29,60 +32,18 @@ class UserController extends Controller
     {
         $this->helper = new helper();
     }
-    private function toGetPlace($latitude, $longitude)
-    {
-
-
-
-        $places = new Product();
-
-        $places = $places->select("*", DB::raw("6371 * acos(cos(radians(" . $latitude . "))
-                                * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
-                                + sin(radians(" . $latitude . ")) * sin(radians(latitude))) AS distance"));
-        $places = $places->having('distance', '<', 50);
-        $places = $places->orderBy('distance', 'asc');
-
-        $places = $places->with('attachmentRelation');
-        return $places;
-    }
+    
     public function home(Request $request)
     {
-        $services = HomeCatResource::collection(Service::all());
-        $banners = Banner::all();
+        $sims = Sim::where('type', $request->type)->get();
+        return $this->helper->ResponseJson(1, __('apis.success'), HomeCatResource::collection($sims)->groupBy('period')->map(function($rows){
+            return $rows;
+        })
+    );
 
-        if ($request->service_id) {
-            $service = Service::where('id', $request->service_id)->first();
-            if ($service) {
-                return $this->helper->ResponseJson(1, __('apis.success'), new PlaceResource($service));
-            } else {
-                return $this->helper->ResponseJson(0, __('apis.faild'), null);
-            }
-        }
-
-        if ($services) {
-            return $this->helper->ResponseJson(1, __('apis.success'), [
-                'services' => PlaceResource::collection($services),
-                'Banners' => BannerResource::collection($banners)
-            ]);
-        }
-        return $this->helper->ResponseJson(0, __('apis.faild'));
     }
 
-    public function Category(Request $request)
-    {
-        if ($request->address_id) {
-            $address = Address::findOrFail($request->address_id);
-            $latitude = $address->lat;
-            $longitude = $address->long;
-        } else {
-            $latitude = auth()->user()->lat;
-            $longitude = auth()->user()->lng;
-        }
-
-        $places = $this->toGetPlace($latitude, $longitude)->where('category_id', $request->category_id)->get();
-
-        return $this->helper->ResponseJson(1, __('apis.success'), PlaceByCatResource::collection($places));
-    }
+   
 
     public function myOrders(Request $request)
     {
@@ -96,24 +57,8 @@ class UserController extends Controller
         }
         return $this->helper->ResponseJson(1, __('apis.success'), OrderResource::collection($orders));
     }
-    public function myTrans(Request $request)
-    {
-        $wallet = Wallet::where('client_id', auth()->user()->id)->first();
+    
 
-        return $this->helper->ResponseJson(1, __('apis.success'), new TransResource($wallet));
-    }
-
-    function search(Request $request)
-    {
-
-
-        $result = Service::where('name', 'LIKE', '%' . $request->name . '%')->get();
-        if (count($result)) {
-            return $this->helper->ResponseJson(1, __('apis.success'), PlaceResource::collection($result));
-        } else {
-            return response()->json(['Result' => 'No Data not found'], 404);
-        }
-    }
 
     public function cancelOrder(Request $request)
     {
@@ -127,5 +72,25 @@ class UserController extends Controller
             return $this->helper->ResponseJson(1, __('apis.success'));
         }
         return $this->helper->ResponseJson(0, __('apis.order_faild'));
+    }
+
+    public function recently()
+    {
+        $sims = Sim::orderBy('id', 'DESC')->get();
+        return $this->helper->ResponseJson(1, __('apis.success') ,   HomeCatResource::collection($sims));
+
+    }
+
+    public function getSim(Request $request)
+    {
+        $sim = Sim::findOrFail($request->sim_id);
+
+        $orders = OrderItem::where('sim_id',$sim->id)->get()->count('sim_id');
+        if($sim){
+            return $this->helper->ResponseJson(1, __('apis.success'), new SimResource($sim));
+
+        }
+        return $this->helper->ResponseJson(0, __('apis.faild'));
+
     }
 }

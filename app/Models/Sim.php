@@ -9,4 +9,8 @@ class Sim extends Model
 {
     use HasFactory;
     protected $guarded= [];
+
+    public function order(){
+        return $this->hasMany(OrderItem::class,'sim_id');
+    }
 }

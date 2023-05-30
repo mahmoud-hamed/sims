@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\SimSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\CreateAdminUserSeeder;
 use Database\Seeders\PermissionTableSeeder;
@@ -21,8 +22,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-                $this->call(CreateAdminUserSeeder::class);
-                $this->call(PermissionTableSeeder::class);
+                // $this->call(CreateAdminUserSeeder::class);
+                // $this->call(PermissionTableSeeder::class);
+                $this->call(SimSeeder::class);
 
 
 

@@ -1,6 +1,6 @@
 @extends('layouts.master2')
 @section('title')
-    {{ __('admin.login2') }} - {{ __('admin.ray') }}
+    {{ __('admin.login2') }} - {{ __('admin.sim') }}
 @stop
 
 @section('css')
