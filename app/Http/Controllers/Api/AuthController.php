@@ -20,7 +20,6 @@ class AuthController extends Controller
     {
         $validatedData = $request->validate([
             'number' => 'required',
-            'userType' => 'nullable'
         ]);
 
         $user = ClientModel::where('number', $validatedData['number'])->first();
@@ -52,14 +51,8 @@ class AuthController extends Controller
                 'verification_code' => $verificationCode,
             ]);
 
-            if (isset($validatedData['userType'])) {
-                $user->userType = $validatedData['userType'];
-                $user->save();
-            }
-            $wallet = Wallet::create([
-                'balance' => 0,
-                'client_id' => $user->id,
-            ]);
+           
+           
 
             // $client = new Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));
             // $client->messages->create(

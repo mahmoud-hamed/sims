@@ -29,6 +29,12 @@ class Order extends Model
     {
         return $this->hasMany('App\Models\OrderItem');
     }
+
+    public function sims()
+    {
+        return $this->hasMany('App\Models\MySim');
+    }
+
     public function address(){
         
         return $this->belongsTo('App\Models\Address');

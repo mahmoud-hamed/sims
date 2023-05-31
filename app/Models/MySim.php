@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItem extends Model
+class MySim extends Model
 {
     use HasFactory;
-    protected $table = 'order_item';
-    public $timestamps = true;
     protected $guarded = [];
+    protected $table = 'my_sim';
 
     public function order()
     {
