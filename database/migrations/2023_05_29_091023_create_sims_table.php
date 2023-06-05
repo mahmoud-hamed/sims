@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('period', ['month', '3months', '6months', 'year']);
             $table->double('price');
             $table->string('serial');
+            $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->timestamps();
         });
     }

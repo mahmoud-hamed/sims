@@ -23,4 +23,9 @@ class MySim extends Model
         return $this->belongsTo('App\Models\Sim' , 'sim_id','id');
     }
 
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client','client_id','id');
+    }
+
 }

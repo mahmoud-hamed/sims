@@ -1,5 +1,9 @@
 @extends('layouts.master')
 @section('css')
+<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.10/dist/sweetalert2.min.css
+" rel="stylesheet">
+
 @endsection
 
 @section('title')
@@ -17,18 +21,36 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
+@include('admin.orders.modal-form6')
 
+@include('dashboard.alerts.alerts')
 				<!-- row -->
 				<div class="row row-sm">
 					<div class="col-md-12 col-xl-12">
 						<div class=" main-content-body-invoice">
 							<div class="card card-invoice">
 								<div class="card-body">
+									<div style="margin-bottom: 10px;">
+									@if ($order->status == 'pending')
+									<button type="button" class=" btn btn-primary col-md-2" id="success" data-toggle="modal"
+										data-target="#accept">قبول</button>
+								@endif
+								@if ($order->status == 'in_progress')
+									<form  style="
+								display: contents; margin-bottom:10px;" 
+										action="{{ route('finish.order', $order->id) }}" method="POST">
+										@csrf
+										@method('PUT')
+										<button type="submit" class="btn btn-danger col-md-2">finish</button>
+			
+									</form>
+								@endif
+							</div>
 									<div class="invoice-header">
 										<h1 class="invoice-title">{{ __('admin.invoice') }}</h1>
 										<div class="billed-from">
-											<h6>{{ __('admin.ray') }}, Inc.</h6>
-											<p>{{ $order->address->title }}<br>
+											<h6>{{ __('admin.sim') }}, Inc.</h6>
+											<p>{{ $order->address->title ?? null }}<br>
 											Tel No: {{ $order->client->number }}<br>
 											Email: {{ $order->client->email ?? 'example@gmail.com' }}</p>
 										</div><!-- billed-from -->
@@ -38,55 +60,57 @@
 											<label class="tx-gray-600">Billed To</label>
 											<div class="billed-to">
 												<h6>{{ $order->client->name }}</h6>
-												<p>{{ $order->address->title }}<br>
+												<p>{{ $order->address->title ?? null }}<br>
 												Tel No: {{ $order->client->number }}<br>
 												Email: {{ $order->client->email ?? 'example@gmail.com' }}</p>
 											</div>
 										</div>
 										<div class="col-md">
 											<label class="tx-gray-600">Invoice Information</label>
-                                            <p class="invoice-info-row"><span>Delivery Name</span> <span>{{ $order->delivery->name }}</span></p>
 
 											<p class="invoice-info-row"><span>Invoice No</span> <span>{{ $order->ref_number }}</span></p>
 											<p class="invoice-info-row"><span>Due Date:</span> <span>{{ Carbon\carbon::parse($order->created_at)->format('Y-m-d') }}</span></p>
 										</div>
 									</div>
 									<div class="table-responsive mg-t-40">
-										<table class="table table-invoice border text-md-nowrap mb-0">
+										<table class="table table-invoice border text-md-nowrap mb-0 text-center">
 											<thead>
 												<tr>
-													<th class="wd-20p">Service</th>
-													<th class="wd-40p">Description</th>
-
-													<th class="tx-center">Service Price</th>
-													<th class="tx-right">delivery Price</th>
+													<th class="wd-20p">Number</th>
+													<th class="wd-40p">serial</th>
+													<th class="wd-20p">period</th>
+													<th class="wd-20p">category</th>
+													<th class="wd-20p">Unit Price</th>
 												</tr>
 											</thead>
 											<tbody>
+												@foreach ($order->items as $item )
 												<tr>
-													<td>{{ $order->service->name }}</td>
-													<td class="tx-12">{{ $order->description }}</td>
-
-													<td class="tx-center">${{ $order->total_service_price ?? 0.0 }}</td>
-													<td class="tx-right">${{ $order->total_del_price }}</td>
+													<td>{{ $item->sim->number }}</td>
+													<td class="tx-12">{{ $item->sim->serial }}</td>
+													<td class="tx-12">{{ $item->sim->period }}</td>
+													<td class="tx-12">${{ $item->sim->type }}</td>
+													<td class="tx-12">${{ $item->sim->price }}</td>
 												</tr>
+												@endforeach
+												
 										
 												<tr>
 													<td class="valign-middle" colspan="2" rowspan="4">
 														
 													</td>
 													<td class="tx-right">Sub-Total</td>
-													<td class="tx-right" colspan="2">${{   $order->total_cost  }}</td>
+													<td class="tx-right" colspan="2">${{   $order->sub_total  }}</td>
 												</tr>
 												
 												<tr>
-													<td class="tx-right">Discount</td>
-													<td class="tx-right" colspan="2">$0.0</td>
+													<td class="tx-right">shipping</td>
+													<td class="tx-right" colspan="2">$50</td>
 												</tr>
 												<tr>
 													<td class="tx-right tx-uppercase tx-bold tx-inverse">Total Due</td>
 													<td class="tx-right" colspan="2">
-														<h4 class="tx-primary tx-bold">${{ $order->total_cost }}</h4>
+														<h4 class="tx-primary tx-bold">${{ $order->total_price }}</h4>
 													</td>
 												</tr>
 											</tbody>
@@ -113,6 +137,7 @@
 		<!-- main-content closed -->
 @endsection
 @section('js')
+
 <script>
     function display() {
 

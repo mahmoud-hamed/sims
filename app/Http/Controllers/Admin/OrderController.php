@@ -16,36 +16,42 @@ class OrderController extends Controller
         $status = $request->input('status');
 
         $orders = Order::query();
-    
+
         if ($status) {
             $orders->where('status', $status);
         }
-    
-        $filteredOrders = $orders->get();        
-        return view('admin.orders.index',compact('filteredOrders'));
+
+        $filteredOrders = $orders->get();
+        return view('admin.orders.index', compact('filteredOrders'));
     }
 
     public function show($id)
     {
         $order = Order::find($id);
 
-        $notification = auth()->user()->notifications()->where('data->id', $id)->first();
+        $notification = auth()
+            ->user()
+            ->notifications()
+            ->where('data->id', $id)
+            ->where('type', 'App\Notifications\NewOrderNoti')
+            ->first();
         if ($notification) {
             $notification->markAsRead();
         }
-        return view('admin.orders.show',compact('order'));
-
+        return view('admin.orders.show', compact('order'));
     }
 
     public function generateInvoice(int $orderId)
     {
-       $order = Order::findOrFail($orderId);
+        $order = Order::findOrFail($orderId);
         $data = ['order' => $order];
         $dompdf = new Dompdf();
         $dompdf = Pdf::loadView('admin.orders.print', $data);
         $dompdf->setPaper('A4', 'landscape');
         $todayDate = Carbon::now()->format('d-m-Y');
-        return $dompdf->download('invoices123456789' . $order->id . '-' . $todayDate . '.pdf');
+        return $dompdf->download(
+            'invoices123456789' . $order->id . '-' . $todayDate . '.pdf'
+        );
         return view('admin.orders.print', compact('order'));
 
         // $pdf = Pdf::loadView('admin.orders.print', compact('order'), [], [
@@ -54,45 +60,68 @@ class OrderController extends Controller
         // ]);
 
         return $pdf->stream('invoice' . $order->id . '-' . $todayDate . '.pdf');
-
     }
-
 
     public function MarkAsRead_all(Request $request)
     {
-
         $userUnreadNotification = auth()->user()->unreadNotifications;
 
         if ($userUnreadNotification) {
             $userUnreadNotification->markAsRead();
             return back();
         }
-
     }
 
     public function unreadNotifications_count()
     {
-        return auth()->user()->unreadNotifications->count();
+        return auth()
+            ->user()
+            ->unreadNotifications->count();
     }
 
     public function unreadNotifications()
     {
         foreach (auth()->user()->unreadNotifications as $notification) {
-
             return $notification->data['title'];
-
         }
-
     }
 
     public function markNotificationAsRead($notificationId)
-{
-    $user = Auth::user();
-    $notification = $user->notifications()->findOrFail($notificationId);
-    $notification->markAsRead();
+    {
+        $user = Auth::user();
+        $notification = $user->notifications()->findOrFail($notificationId);
+        $notification->markAsRead();
 
-    return response()->json(['success' => true]);
-}
+        return response()->json(['success' => true]);
+    }
 
-   
+  
+    public function assign(Request $request, $id)
+    {
+
+        $order = Order::findOrFail($id);
+        $order->update([
+        'status'=>'in_progress'
+        ]);
+        $order->save();
+        
+        //         $user = Client::findOrFail($trip->client_id);
+
+        // $user->notify(new AcceptOrder($trip->id));
+
+
+        return redirect()->back()->with('success', 'success');
+
+    }
+
+    public function finish($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update([
+            'status'=>'done'
+        ]);
+        $order->save();
+        return redirect()->back()->with('success', 'success');
+
+    }
 }

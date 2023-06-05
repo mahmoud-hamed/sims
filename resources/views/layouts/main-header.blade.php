@@ -9,7 +9,7 @@
                         src="{{ URL::asset('assets/img/brand/logo-white.png') }}" class="dark-logo-1" alt="logo"></a>
                 <a href="{{ url('/' . ($page = 'index')) }}"><img src="{{ URL::asset('assets/img/logo.2.png') }}"
                         class="logo-2" alt="logo"></a>
-                <a href="{{ url('/' . ($page = 'index')) }}"><img src="{{ URL::asset('assets/img/logo..png') }}"
+                <a href="{{ url('/' . ($page = 'index')) }}"><img src="{{ URL::asset('assets/img/logo.2.png') }}"
                         class="dark-logo-2" alt="logo"></a>
             </div>
             <div class="app-sidebar__toggle" data-toggle="sidebar">
@@ -189,7 +189,12 @@
                             @foreach (auth()->user()->Notifications as $notification)
                                 <div class="main-notification-list Notification-scroll">
                                     <a class="d-flex p-3 border-bottom"
-                                        href="{{ url('orders') }}/{{ $notification->data['id'] }}">
+                                    @if($notification->type == 'NewOrderNoti')
+                                        href="{{ url('orders') }}/{{ $notification->data['id'] }}"
+                                        @else
+                                        href="#"
+                                        @endif
+                                        >
                                         <div class="notifyimg ">
                                             <div class="notification-subtext">
                                                 @if($notification->read_at == null)

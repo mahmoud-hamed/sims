@@ -75,6 +75,12 @@
         $("#unreadNotifications").load(window.location.href + " #unreadNotifications");
     }, 5000);
 </script>
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.10/dist/sweetalert2.all.min.js
+"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -84,7 +90,7 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
-    var pusher = new Pusher('2d29478d36a13c14ce84', {
+    var pusher = new Pusher('b2a780cba5cdd4198606', {
   cluster: 'ap1'
 });
 
@@ -98,7 +104,14 @@
 
     var channel2 = pusher.subscribe('popup-channel');
     channel.bind('new-order', function(data) {
-        toastr.success(  'لديك طلب جديد')
+        toastr.warning('لديك طلب جديد')
+        // alert(JSON.stringify(data))
+
+    });
+
+    var channel3 = pusher.subscribe('popup-channel');
+    channel.bind('sim-alert', function(data) {
+        toastr.warning('الاشتراك اوشك علي الانتهاء ')
         // alert(JSON.stringify(data))
 
     });

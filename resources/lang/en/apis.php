@@ -13,6 +13,7 @@ return [
   |
    */
   'order_faild'=>'sorry you cannot cancel order now',
+  'unavail'=>'this sim is not available now',
 
   'loggedOut'           => 'Log Out successfully',
   'AdminNotify'         => 'Admin Notify',
