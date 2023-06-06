@@ -49,8 +49,6 @@
                     <li><a class="slide-item  {{ request()->is('users/users') ? 'active' : '' }}"
                             href="{{ url('/' . ($page = 'users/users')) }}">{{ __('admin.users') }}</a></li>
 
-                    <li><a class="slide-item  {{ request()->is('users/deliverys') ? 'active' : '' }}"
-                            href="{{ url('/' . ($page = 'users/deliverys')) }}">{{ __('admin.deliver') }}</a></li>
                 </ul>
             </li>
 

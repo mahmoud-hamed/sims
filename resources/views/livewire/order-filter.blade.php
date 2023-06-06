@@ -12,7 +12,7 @@
                 <option hidden>{{__('admin.all')}}</option>
                 <option value="all">{{ __('admin.all') }}</option>
                 <option value="pending">{{ __('admin.pending') }}</option>
-                <option value="on_delivery">{{ __('admin.recent') }}</option>
+                <option value="in_progress">{{ __('admin.recent') }}</option>
                 <option value="done">{{ __('admin.done') }}</option>
                 <option value="cancelled">{{ __('admin.cancelled') }}</option>
 
@@ -52,7 +52,7 @@
                                     <td>
                                         @if($item->status == 'pending')
                                         <span class="badge  badge-warning">{{ __('admin.pending') }}</span>
-                                        @elseif($item->status == 'on_delivery')
+                                        @elseif($item->status == 'in_progress')
                                         <span class="badge badge-primary">{{ __('admin.recent') }}</span>
                                         @elseif($item->status == 'done')
                                         <span class="badge badge-success">{{ __('admin.done') }}</span>

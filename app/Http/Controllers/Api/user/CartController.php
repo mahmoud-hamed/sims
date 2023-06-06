@@ -27,7 +27,11 @@ class CartController extends Controller
           return $this->helper->ResponseJson(0,$validator->errors()->first(),$validator->errors());
             }
             
-            $sim=Sim::findOrFail($request->sim_id);
+            $sim=Sim::where('id',$request->sim_id)->where('status','available')->first();
+            if(!$sim){
+                return $this->helper->ResponseJson(0, __('apis.unavail'));
+
+            }
             $checkCartItem = Cart::where('client_id',auth()->user()->id)->where('sim_id',$sim->id)->first();
             if($checkCartItem){
                 return $this->helper->ResponseJson(0, __('apis.cart_faild'));
@@ -53,7 +57,7 @@ class CartController extends Controller
                     'price'=>$sim->price,
                     'total_price'=> $total_price,
                     'start_date'=> Carbon::now()->format('Y-m-d'),
-                    'end_date'=> Carbon::now()->addMonth(3)->format('Y-m-d'),
+                    'end_date'=> Carbon::now()->format('Y-m-d'),
                    ]);
                    return $this->helper->ResponseJson(1, __('apis.success'), $cart);
             }elseif($sim->period == '6months'){

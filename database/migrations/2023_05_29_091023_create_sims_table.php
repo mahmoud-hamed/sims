@@ -17,7 +17,10 @@ return new class extends Migration
             $table->enum('type', ['zain', 'mobily', 'stc']);
             $table->enum('period', ['month', '3months', '6months', 'year']);
             $table->double('price');
+
             $table->string('serial')->unique();
+
+            $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->timestamps();
         });
     }

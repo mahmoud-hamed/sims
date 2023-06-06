@@ -42,7 +42,7 @@ Route::get('/', function () {
     ->name('signin');
 
 Route::get('table', function () {
-    return view('spinners');
+    return view('invoice');
 });
 Route::get('/home', [AdminController::class, 'home'])
     ->middleware(['auth', 'verified'])
@@ -64,6 +64,9 @@ Route::get('lang/{lang}', [
 Route::middleware('auth')->group(function () {
 
     Route::controller(OrderController::class)->group(function () {
+        Route::put('order/assign/{id}','assign')->name('assign.order');
+        Route::put('order/finish/{id}','finish')->name('finish.order');
+
         Route::get('orders', 'index')->name('orders');
         Route::get('orders/{id}', 'show')->name('show.orders');
         Route::get('/invoice/{orderId}/generate', 'generateInvoice');

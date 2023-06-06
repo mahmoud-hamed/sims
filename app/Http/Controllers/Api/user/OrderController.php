@@ -64,6 +64,10 @@ class OrderController extends Controller
     
                 foreach ($cart as $item) {
 
+                    $item->sims->update([
+                        'status'=>'unavailable',
+                    ]);
+
                     OrderItem::create([
                         'sim_id' => $item->sim_id,
                         'qty' => $item->qty,

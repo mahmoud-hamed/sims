@@ -46,28 +46,6 @@
 @endsection
 
 @section('js')
-<script>
-$(document).ready(function() {
-    $('#orderFilterForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        var status = $('#status').val();
-
-        $.ajax({
-            url: '{{ route("orders") }}',
-            method: 'GET',
-            data: { status: status },
-            success: function(response) {
-                $('#ordersContainer').html(response);
-            },
-            error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        });
-    });
-});
-
-</script>
 
 <!-- Internal Data tables -->
 <script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
@@ -88,8 +66,6 @@ $(document).ready(function() {
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
-<script src="{{ asset('admin/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('admin/app-assets/js/scripts/extensions/sweet-alerts.js') }}"></script>
 
 {{-- delete one user script --}}
 @include('dashboard.shared.deleteOne')
