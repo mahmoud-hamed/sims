@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('sims', function (Blueprint $table) {
             $table->id();
-            $table->string('number');
+            $table->string('number')->unique();
             $table->enum('type', ['zain', 'mobily', 'stc']);
             $table->enum('period', ['month', '3months', '6months', 'year']);
             $table->double('price');
-            $table->string('serial');
+
+            $table->string('serial')->unique();
+
             $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->timestamps();
         });
