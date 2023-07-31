@@ -10,25 +10,19 @@
     <meta name="Keywords"
         content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4" />
 @include('layouts.head')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
  
         <!-- alternatively you can use the font awesome icon library if using with `fas` theme (or Bootstrap 4.x) by uncommenting below. -->
         <!-- link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" crossorigin="anonymous" -->
          
         <!-- the fileinput plugin styling CSS file -->
-        <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
-        <style>
-            .btn-primary{
-                background-color: #FFBE03;
-    border-color: #FFBE03;
-            }
-        </style>
+         
 </head>
 
 <body class="main-body">
@@ -65,6 +59,7 @@
     
 
 
+
 </body>
 
 </html>
@@ -75,12 +70,8 @@
         $("#unreadNotifications").load(window.location.href + " #unreadNotifications");
     }, 5000);
 </script>
-<script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.7.10/dist/sweetalert2.all.min.js
-"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -91,13 +82,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.10/dist/sweetalert2.all.min.js
     Pusher.logToConsole = true;
 
     var pusher = new Pusher('b2a780cba5cdd4198606', {
-  cluster: 'ap1'
-});
+        cluster: 'ap1'
+    });
 
 
     var channel = pusher.subscribe('popup-channel');
     channel.bind('user-register', function(data) {
-        toastr.success(  'لديك مستخدم جديد')
+        toastr.success('لديك مستخدم جديد')
         // alert(JSON.stringify(data))
 
     });
@@ -115,11 +106,4 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.10/dist/sweetalert2.all.min.js
         // alert(JSON.stringify(data))
 
     });
-
-
-
-    
 </script>
-
-
-

@@ -25,6 +25,7 @@ use App\Http\Resources\HomeCatResource;
 use App\Http\Resources\DelOrderResource;
 use App\Http\Resources\PlaceByCatResource;
 use App\Http\Resources\TrackOrderResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
@@ -35,10 +36,12 @@ class UserController extends Controller
     
     public function home(Request $request)
     {
+        $banners = Banner::select('id','banner_'.app()->getLocale().' as banner','created_at')->get();
+
+
+
         $sims = Sim::where('type', $request->type)->get();
-        return $this->helper->ResponseJson(1, __('apis.success'), HomeCatResource::collection($sims)->groupBy('period')->map(function($rows){
-            return $rows;
-        })
+        return $this->helper->ResponseJson(1, __('apis.success'), $banners
     );
 
     }
@@ -83,14 +86,15 @@ class UserController extends Controller
 
     public function getSim(Request $request)
     {
-        $sim = Sim::findOrFail($request->sim_id);
-
-        $orders = OrderItem::where('sim_id',$sim->id)->get()->count('sim_id');
-        if($sim){
-            return $this->helper->ResponseJson(1, __('apis.success'), new SimResource($sim));
-
+        try {
+            $sim = Sim::findOrFail($request->sim_id);
+    
+            $orders = OrderItem::where('sim_id', $sim->id)->count();
+    
+            return $this->helper->ResponseJson(1, __('apis.success'), new SimResource($sim, $orders));
+        } catch (ModelNotFoundException $e) {
+            return $this->helper->ResponseJson(0, __('apis.faild'), [], __('apis.sim_not_found'));
         }
-        return $this->helper->ResponseJson(0, __('apis.faild'));
-
     }
+    
 }

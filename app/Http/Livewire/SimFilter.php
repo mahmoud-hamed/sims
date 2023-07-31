@@ -14,16 +14,18 @@ class SimFilter extends Component
     protected $paginationTheme = 'bootstrap';
 
 
-    public $searchh;
+    public $searchh = '';
     public $search = 'all';
     public function render()
     {
         $search = $this->search;
+        $searchh = $this->searchh;
+
         if ($this->search == 'all') {
-            $sims = Sim::orderBy('id', 'DESC')->paginate(5);
+            $sims = Sim::where('number' , 'like' , '%' . $this->searchh . '%')->orderBy('id', 'DESC')->paginate(5);
             return view('livewire.sim-filter', compact('sims'));
         }
-        $sims = Sim::where('period', $this->search)->orderBy('id', 'DESC')->paginate(5);
+        $sims = Sim::where('number' , 'like' , '%' . $this->searchh . '%')->where('period', 'like' , '%' .  $this->search . '%')->orderBy('id', 'DESC')->paginate(5);
         return view('livewire.sim-filter', compact('sims'));
     }
 }

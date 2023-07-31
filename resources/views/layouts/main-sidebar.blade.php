@@ -67,12 +67,7 @@
 
             <li class="slide {{ Request::segment(1) == 'sims' ? 'active' : '' }}">
 
-                <a class="side-menu__item" href="{{ url('/' . ($page = 'sims')) }}"><svg class="side-menu__icon"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                        <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                        <path
-                            d="M253.3 35.1c6.1-11.8 1.5-26.3-10.2-32.4s-26.3-1.5-32.4 10.2L117.6 192H32c-17.7 0-32 14.3-32 32s14.3 32 32 32L83.9 463.5C91 492 116.6 512 146 512H430c29.4 0 55-20 62.1-48.5L544 256c17.7 0 32-14.3 32-32s-14.3-32-32-32H458.4L365.3 12.9C359.2 1.2 344.7-3.4 332.9 2.7s-16.3 20.6-10.2 32.4L404.3 192H171.7L253.3 35.1zM192 304v96c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16s16 7.2 16 16zm96-16c8.8 0 16 7.2 16 16v96c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16zm128 16v96c0 8.8-7.2 16-16 16s-16-7.2-16-16V304c0-8.8 7.2-16 16-16s16 7.2 16 16z" />
-                    </svg><span class="side-menu__label">{{ __('admin.sims') }}</span></a>
+                <a class="side-menu__item" href="{{ url('/' . ($page = 'sims')) }}"><svg class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 0H242.7c17 0 33.3 6.7 45.3 18.7L365.3 96c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0zM96 192c-17.7 0-32 14.3-32 32v32h64V192H96zM64 352h80 96 80V288H240 144 64v64zM320 224c0-17.7-14.3-32-32-32H256v64h64V224zM160 192v64h64V192H160zM288 448c17.7 0 32-14.3 32-32V384H256v64h32zM160 384v64h64V384H160zM64 416c0 17.7 14.3 32 32 32h32V384H64v32z"/></svg><span class="side-menu__label">{{ __('admin.sims') }}</span></a>
             </li>
 
 
@@ -108,8 +103,11 @@
                             href="{{ url('/' . ($page = 'settings/complains')) }}">{{ __('admin.complaining') }}</a>
                     </li>
 
-                    <li><a class="slide-item {{ request()->is('settings/contacts') ? 'active' : '' }}"
+                    <li><a class="slide-item {{ request()->is('settings/contac') ? 'active' : '' }}"
                             href="{{ url('/' . ($page = 'settings/contacts')) }}">{{ __('admin.contac') }}</a></li>
+                            <li><a class="slide-item {{ request()->is('settings/siteSetting') ? 'active' : '' }}"
+                                href="{{ url('/' . ($page = 'settings/siteSetting')) }}">{{ __('admin.introductory_site_setting') }}</a></li>
+    
                 </ul>
             </li>
         </ul>

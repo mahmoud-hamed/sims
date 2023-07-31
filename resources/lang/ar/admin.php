@@ -1,7 +1,19 @@
 <?php
 return [
+    'number'=>'رقم الشريحه',
     "home" => "الرئيسيه",
     "create" => "اضافه",
+"end_date" => "تاريخ الأنتهاء",
+"company" => "الشركه ",
+"whatss"=>"الواتساب",
+"app_store"=>"لينك اب ستور",
+"google"=>"لينك جوجل بلاي",
+"facebook"=>"لينك فيسبوك",
+"twiiter"=>"تويتر",
+"instagram"=>"انستقرام",
+"snapchat"=>"سنابشات",
+'current_logo'=>'اللوجو الحالي',
+
     'places' => 'الأماكن',
     'add-place' => 'إضافه خدمه',
     'reme' => 'تذكرني',
@@ -169,6 +181,8 @@ return [
     "status" => "الحالة",
     "add" => "اضافه",
     "password_confirmation" => "تأكيد كلمه المرور",
+    "banner_ar"=>"التصميم بالعربيه",
+    "banner_en"=>"التصميم بالأنجليزيه",
 
     "update" => "تعديل",
     "update_successfullay" => "تم التعديل بنجاح",
@@ -178,7 +192,6 @@ return [
     "Progressive" => "تصاعدي",
     "descending" => "تنازلي",
     "beginning_date" => "بداية التاريخ",
-    "end_date" => "نهاية التاريخ",
     "back" => "رجوع",
     "Validity" => "الصلاحية",
     "Validities" => "الصلاحيات",

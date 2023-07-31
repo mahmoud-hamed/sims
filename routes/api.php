@@ -56,6 +56,7 @@ Route::group(['middleware' => 'api-lang'], function () {
             Route::get('home', [UserController::class, 'home']);
             Route::get('get-sim',[UserController::class, 'getSim']);
             Route::get('/settings', [SettingController::class, 'index']);
+
             Route::post('/send_complain', [ComplainsController::class, 'send_complain']);
             Route::post('/contact_us', [ComplainsController::class, 'contact_us']);
         
@@ -84,5 +85,6 @@ Route::group(['middleware' => 'api-lang'], function () {
 
 
 });
+Route::get('/siteSetting', [SettingController::class, 'siteSettings']);
 
 Route::get('test', [AuthController::class, 'test']);

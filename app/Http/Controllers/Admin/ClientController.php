@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\MySim;
 use App\Models\Client;
 use App\helpers\Attachment;
 use App\Http\Controllers\Controller;
@@ -84,5 +85,10 @@ class ClientController extends Controller
             'delete',
             Lang::get('notification.del_user')
         );
+    }
+    public function mySims($id)
+    {
+        $sims = MySim::where('client_id' , $id)->get();
+        return view('admin.users.mysims',compact('sims'));
     }
 }

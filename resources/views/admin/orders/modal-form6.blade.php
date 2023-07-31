@@ -9,6 +9,7 @@
                     </button>
             </div>
             <div class="modal-body">
+                <h5 class="modal-title fs-5" id="exampleModalLabel">{{ __('admin.are_you_want_to_continue') }}</h5>
             </div>
             <div class="modal-footer">
 

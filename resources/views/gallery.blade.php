@@ -43,7 +43,7 @@
 				<!-- Gallery -->
 				<div class="demo-gallery">
 					<ul id="lightgallery" class="list-unstyled row row-sm pr-0">
-						<li class="col-sm-6 col-lg-4" data-responsive="{{URL::asset('assets/img/photos/1.jpg')}}" data-src="{{URL::asset('assets/img/photos/1.jpg')}}" data-sub-html="<h4>Gallery Image 1</h4>" >
+						<li class="col-sm-4 col-lg-6" data-responsive="{{URL::asset('assets/img/photos/1.jpg')}}" data-src="{{URL::asset('assets/img/photos/1.jpg')}}" data-sub-html="<h4>Gallery Image 1</h4>" >
 							<a href="">
 								<img class="img-responsive" src="{{URL::asset('assets/img/photos/1.jpg')}}" alt="Thumb-1">
 							</a>

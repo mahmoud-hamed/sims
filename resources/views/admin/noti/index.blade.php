@@ -57,7 +57,8 @@
                         <div class="mb-3">
                             <div class="form-group">
                                 <label for="image">{{ __('admin.image') }}</label>
-                                <input id="input-b3" name="image" type="file">
+                                <input type="file" class="dropify" name="image" data-height="200" />
+
                             </div>
                         </div>
 

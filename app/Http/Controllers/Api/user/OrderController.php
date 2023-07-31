@@ -101,7 +101,7 @@ class OrderController extends Controller
                 Cart::destroy($cartItems);
     
                 DB::commit(); // Commit the transaction since all operations were successful
-    
+                
                 return $this->helper->ResponseJson(1, __('apis.success'), $order);
             } else {
                 DB::rollBack(); // Roll back the transaction since the cart is empty

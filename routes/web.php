@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -8,7 +7,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\Admin\SimController;
+use App\Http\Controllers\Admin\NotiController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
@@ -17,10 +19,9 @@ use App\Http\Controllers\InvoiceAchiveController;
 use App\Http\Controllers\InvoiceReportController;
 use App\Http\Controllers\Admin\ComplainController;
 use App\Http\Controllers\Admin\DeliveryController;
-use App\Http\Controllers\Admin\NotiController;
-use App\Http\Controllers\Admin\SimController;
 use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\CustomersReportController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\InvoiceAttachmentController;
 
@@ -42,7 +43,7 @@ Route::get('/', function () {
     ->name('signin');
 
 Route::get('table', function () {
-    return view('invoice');
+    return view('form-advanced');
 });
 Route::get('/home', [AdminController::class, 'home'])
     ->middleware(['auth', 'verified'])
@@ -109,6 +110,7 @@ Route::middleware('auth')->group(function () {
             Route::get('user/edit/{id}', 'edit')->name('user.edit');
             Route::post('user/update/{id}', 'update')->name('user.update');
             Route::delete('user/delete/{id}', 'destroy')->name('user.destroy');
+            Route::get('my-sims/{id}' , 'mySims')->name('users.mysims');
         });
     });
 
@@ -125,6 +127,12 @@ Route::middleware('auth')->group(function () {
             'complain.destroy'
         );
     });
+
+    // routes/web.php
+
+    Route::get('settings/siteSetting', [SiteSettingController::class , 'edit'])->name('edit-sitesetting');
+    Route::post('settings/siteSetting', [SiteSettingController::class , 'update'])->name('update-sitesetting');
+
 
     Route::controller(NotiController::class)->group(function () {
         Route::get('noti', 'noti')->name('noti');

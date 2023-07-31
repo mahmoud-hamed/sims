@@ -15,6 +15,9 @@
                 <option value="in_progress">{{ __('admin.recent') }}</option>
                 <option value="done">{{ __('admin.done') }}</option>
                 <option value="cancelled">{{ __('admin.cancelled') }}</option>
+                <hr/>
+                <option value="cancelled">{{ __('admin.cancelled') }}</option>
+
 
             </select>
     
@@ -41,7 +44,7 @@
                             @php
                             $i = 0;
                             @endphp
-                            @foreach ($orders as $item)
+                            @forelse ($orders as $item)
                                 @php
                                 $i++
                                 @endphp
@@ -76,8 +79,11 @@
                                    
                                     </td>
                                 </tr>
-                            @endforeach
-  
+                                @empty
+                                <tr>
+                                    <td colspan="7">{{ __('admin.there_is_no_data_at_the_moment') }}</td>
+                                </tr>
+                            @endforelse  
                         </tbody>
                     </table>
 
