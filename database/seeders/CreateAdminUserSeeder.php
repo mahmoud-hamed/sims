@@ -31,12 +31,12 @@ class CreateAdminUserSeeder extends Seeder
             'Status' => 'مفعل',
         ]);
 
-        $role = Role::create(['name' => 'SuperAdmin']);
+        // $role = Role::create(['name' => 'SuperAdmin']);
 
-        $permissions = Permission::pluck('id', 'id')->all();
+        // $permissions = Permission::pluck('id', 'id')->all();
 
-        $role->syncPermissions($permissions);
+        // $role->syncPermissions($permissions);
 
-        $user->assignRole([$role->id]);
+        // $user->assignRole([$role->id]);
     }
 }

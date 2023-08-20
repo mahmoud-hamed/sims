@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('order_item', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id');
-            $table->integer('sim_id');
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table->unsignedBigInteger('sim_id');
+            $table->foreign('sim_id')->references('id')->on('sims')->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->integer('qty');
             $table->float('price');
             $table->float('total_price');  

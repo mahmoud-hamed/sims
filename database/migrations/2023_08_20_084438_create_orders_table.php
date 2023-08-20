@@ -18,7 +18,11 @@ return new class extends Migration
             $table->float('shipping_price')->default(0.0);
             $table->float('total_price')->default(0.0);
             $table->enum('status',['pending','in_progress','done','cancelled'])->default('pending');
-            $table->integer('client_id');
+            $table->unsignedBigInteger('client_id');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade')
+                ->onUpdate('cascade');
+                $table->string('name');
+
             $table->string('address');
             $table->string('phone');
             $table->timestamps();

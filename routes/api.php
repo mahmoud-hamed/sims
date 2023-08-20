@@ -25,6 +25,9 @@ use App\Http\Controllers\Api\user\NotiController;
 */
 
 Route::group(['middleware' => 'api-lang'], function () {
+
+    Route::get('recently-added', [UserController::class, 'recently']);
+
     Route::group(['middleware' => 'auth:api'], function () {
 
 
@@ -48,7 +51,6 @@ Route::group(['middleware' => 'api-lang'], function () {
             Route::get('my-trans', [UserController::class, 'myTrans']);
             Route::post('search', [UserController::class, 'search']);
             Route::post('cancel-order', [UserController::class, 'cancelOrder']);
-            Route::get('recently-added', [UserController::class, 'recently']);
             Route::post('/insertData', [AuthController::class, 'insertData']);
             Route::get('/profile', [AuthController::class, 'profile']);
             Route::post('/editProfile', [AuthController::class, 'editProfile']);
